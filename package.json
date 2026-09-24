@@ -1,0 +1,29 @@
+{
+  "name": "shoplane-level-2",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "concurrently -k -n API,WEB \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "npm start -w server",
+    "seed": "npm run seed -w server",
+    "admin": "node server/make-admin.js",
+    "test": "npm test -w server",
+    "check": "node scripts/check.mjs",
+    "test:e2e": "playwright test",
+    "deploy:render": "node scripts/deploy-render.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "@playwright/test": "1.58.2"
+  }
+}

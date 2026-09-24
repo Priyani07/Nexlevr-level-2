@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import request from 'supertest';
+import {createApp} from '../app.js';
+process.env.JWT_SECRET='validation-test-secret-with-over-32-characters';
+const app=createApp();
+const h={'X-Requested-With':'Shoplane'};
+test('disconnected database produces unhealthy status',async()=>{const r=await request(app).get('/api/health').expect(503);assert.equal(r.body.status,'unavailable');});
+test('write requests without anti-CSRF header are rejected',async()=>{await request(app).post('/api/auth/register').send({}).expect(403);});
+test('invalid registration is rejected before reaching database',async()=>{await request(app).post('/api/auth/register').set(h).send({name:'A',email:'bad-email',password:'123'}).expect(400);});
+test('protected routes reject anonymous requests',async()=>{await request(app).get('/api/orders').expect(401);await request(app).get('/api/admin/products').expect(401);});
+test('invalid IDs and category filters produce validation errors',async()=>{await request(app).get('/api/products/nope').expect(400);await request(app).get('/api/products?category=invalid').expect(400);});
+test('unknown API route remains JSON, never frontend HTML',async()=>{const r=await request(app).get('/api/nonexistent').expect(404);assert.match(r.headers['content-type'],/json/);});

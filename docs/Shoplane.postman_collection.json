@@ -1,0 +1,345 @@
+{
+  "info": {
+    "name": "Shoplane Level 2 API",
+    "description": "Run against your local demo. Cookie jar retains the session. Admin requests require an account promoted using npm run admin. Sample password is a demo value; change it. Each order request generates a new UUID.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "email",
+      "value": "demo@example.com"
+    },
+    {
+      "key": "password",
+      "value": "DemoAccount123!"
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Register (change the email for a new account)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Demo Customer\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Current user",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/me"
+      }
+    },
+    {
+      "name": "List products and save first product ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/products"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200 && pm.response.json().length) pm.collectionVariables.set(\"productId\", pm.response.json()[0]._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search products",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/products?search=headphones&sort=price-asc"
+      }
+    },
+    {
+      "name": "Product details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/products/{{productId}}"
+      }
+    },
+    {
+      "name": "Place COD demo order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requestId\": \"{{$guid}}\",\n  \"items\": [\n    {\n      \"product\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"address\": {\n    \"name\": \"Demo Customer\",\n    \"phone\": \"9876543210\",\n    \"line\": \"12 Demo Street\",\n    \"city\": \"Mandsaur\",\n    \"pincode\": \"458001\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201) pm.collectionVariables.set(\"orderId\", pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "My orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/orders"
+      }
+    },
+    {
+      "name": "Admin \u2014 products",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/products"
+      }
+    },
+    {
+      "name": "Admin \u2014 create product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"CUSTOM-001\",\n  \"name\": \"Custom Headphones\",\n  \"description\": \"An illustrative product for the demo store.\",\n  \"category\": \"Electronics\",\n  \"price\": 199900,\n  \"stock\": 20,\n  \"image\": \"/products/studio-headphones.svg\",\n  \"active\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin \u2014 orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/orders"
+      }
+    },
+    {
+      "name": "Admin \u2014 process order",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/orders/{{orderId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Processing\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Shoplane"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/logout",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "sku": "SL-001",
+    "name": "Studio Headphones",
+    "description": "Studio Headphones brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 249900,
+    "stock": 13,
+    "image": "/products/studio-headphones.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-002",
+    "name": "Pocket Speaker",
+    "description": "Pocket Speaker brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 129900,
+    "stock": 14,
+    "image": "/products/pocket-speaker.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-003",
+    "name": "Wireless Keyboard",
+    "description": "Wireless Keyboard brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 219900,
+    "stock": 15,
+    "image": "/products/wireless-keyboard.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-004",
+    "name": "Everyday Mouse",
+    "description": "Everyday Mouse brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 89900,
+    "stock": 16,
+    "image": "/products/everyday-mouse.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-005",
+    "name": "Desk Charger",
+    "description": "Desk Charger brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 149900,
+    "stock": 17,
+    "image": "/products/desk-charger.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-006",
+    "name": "Focus Earbuds",
+    "description": "Focus Earbuds brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 179900,
+    "stock": 18,
+    "image": "/products/focus-earbuds.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-007",
+    "name": "Portable Power Bank",
+    "description": "Portable Power Bank brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 159900,
+    "stock": 19,
+    "image": "/products/portable-power-bank.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-008",
+    "name": "Smart Desk Clock",
+    "description": "Smart Desk Clock brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 119900,
+    "stock": 20,
+    "image": "/products/smart-desk-clock.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-009",
+    "name": "USB-C Hub",
+    "description": "USB-C Hub brings considered design to your daily routine. A versatile addition to your electronics collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Electronics",
+    "price": 189900,
+    "stock": 21,
+    "image": "/products/usb-c-hub.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-010",
+    "name": "Arc Table Lamp",
+    "description": "Arc Table Lamp brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 189900,
+    "stock": 22,
+    "image": "/products/arc-table-lamp.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-011",
+    "name": "Stoneware Mug",
+    "description": "Stoneware Mug brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 49900,
+    "stock": 23,
+    "image": "/products/stoneware-mug.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-012",
+    "name": "Cotton Cushion",
+    "description": "Cotton Cushion brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 69900,
+    "stock": 24,
+    "image": "/products/cotton-cushion.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-013",
+    "name": "Minimal Wall Clock",
+    "description": "Minimal Wall Clock brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 129900,
+    "stock": 25,
+    "image": "/products/minimal-wall-clock.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-014",
+    "name": "Ceramic Planter",
+    "description": "Ceramic Planter brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 59900,
+    "stock": 26,
+    "image": "/products/ceramic-planter.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-015",
+    "name": "Glass Carafe",
+    "description": "Glass Carafe brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 79900,
+    "stock": 27,
+    "image": "/products/glass-carafe.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-016",
+    "name": "Linen Throw",
+    "description": "Linen Throw brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 159900,
+    "stock": 28,
+    "image": "/products/linen-throw.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-017",
+    "name": "Oak Desk Tray",
+    "description": "Oak Desk Tray brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 89900,
+    "stock": 29,
+    "image": "/products/oak-desk-tray.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-018",
+    "name": "Scented Candle",
+    "description": "Scented Candle brings considered design to your daily routine. A versatile addition to your home & living collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Home & Living",
+    "price": 64900,
+    "stock": 30,
+    "image": "/products/scented-candle.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-019",
+    "name": "Canvas Daypack",
+    "description": "Canvas Daypack brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 199900,
+    "stock": 12,
+    "image": "/products/canvas-daypack.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-020",
+    "name": "Classic Tote",
+    "description": "Classic Tote brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 79900,
+    "stock": 13,
+    "image": "/products/classic-tote.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-021",
+    "name": "Everyday Watch",
+    "description": "Everyday Watch brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 249900,
+    "stock": 14,
+    "image": "/products/everyday-watch.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-022",
+    "name": "Slim Wallet",
+    "description": "Slim Wallet brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 89900,
+    "stock": 15,
+    "image": "/products/slim-wallet.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-023",
+    "name": "Round Sunglasses",
+    "description": "Round Sunglasses brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 119900,
+    "stock": 16,
+    "image": "/products/round-sunglasses.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-024",
+    "name": "Travel Pouch",
+    "description": "Travel Pouch brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 59900,
+    "stock": 17,
+    "image": "/products/travel-pouch.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-025",
+    "name": "Laptop Sleeve",
+    "description": "Laptop Sleeve brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 129900,
+    "stock": 18,
+    "image": "/products/laptop-sleeve.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-026",
+    "name": "Weekend Duffel",
+    "description": "Weekend Duffel brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 229900,
+    "stock": 19,
+    "image": "/products/weekend-duffel.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-027",
+    "name": "Key Organizer",
+    "description": "Key Organizer brings considered design to your daily routine. A versatile addition to your accessories collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Accessories",
+    "price": 39900,
+    "stock": 20,
+    "image": "/products/key-organizer.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-028",
+    "name": "Insulated Bottle",
+    "description": "Insulated Bottle brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 99900,
+    "stock": 21,
+    "image": "/products/insulated-bottle.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-029",
+    "name": "Daily Planner",
+    "description": "Daily Planner brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 49900,
+    "stock": 22,
+    "image": "/products/daily-planner.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-030",
+    "name": "Yoga Mat",
+    "description": "Yoga Mat brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 149900,
+    "stock": 23,
+    "image": "/products/yoga-mat.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-031",
+    "name": "Resistance Bands",
+    "description": "Resistance Bands brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 69900,
+    "stock": 24,
+    "image": "/products/resistance-bands.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-032",
+    "name": "Sketch Notebook",
+    "description": "Sketch Notebook brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 34900,
+    "stock": 25,
+    "image": "/products/sketch-notebook.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-033",
+    "name": "Stainless Lunchbox",
+    "description": "Stainless Lunchbox brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 89900,
+    "stock": 26,
+    "image": "/products/stainless-lunchbox.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-034",
+    "name": "Travel Tumbler",
+    "description": "Travel Tumbler brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 119900,
+    "stock": 27,
+    "image": "/products/travel-tumbler.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-035",
+    "name": "Classic Cap",
+    "description": "Classic Cap brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 59900,
+    "stock": 28,
+    "image": "/products/classic-cap.svg",
+    "active": true
+  },
+  {
+    "sku": "SL-036",
+    "name": "Desk Journal",
+    "description": "Desk Journal brings considered design to your daily routine. A versatile addition to your lifestyle collection, with a clean silhouette and an easy-to-use everyday form. Illustrative demo product; no real goods are sold.",
+    "category": "Lifestyle",
+    "price": 69900,
+    "stock": 29,
+    "image": "/products/desk-journal.svg",
+    "active": true
+  }
+]
