@@ -1,98 +1,111 @@
-# Shoplane — Level 2 final project
+# Shoplane
 
-A complete MERN e-commerce **demo** and GitHub Actions CI/CD implementation in one repository.
+Shoplane is a full-stack e-commerce application built with React, Node.js, Express and MongoDB. Customers can browse products, manage a shopping cart and place cash-on-delivery demo orders. Administrators manage products, inventory and order fulfillment.
 
-- **Task 01:** React storefront + Node.js/Express API + MongoDB persistence.
-- **Task 02:** automatic tests/build on pull requests and main; optional gated Render deployment with live commit verification.
+## Features
 
-The source code and guides are included. You still need to create your GitHub repository, configure MongoDB/hosting, get a successful live deployment, record your own demo, and publish your social post/walkthrough to complete the external proof-of-work requirements. No accounts, public posts or deployments were created for you.
+- Responsive storefront with 36 products across four categories and bundled product photographs.
+- Product search, category filters, sorting and detailed product views.
+- Account registration, login and logout.
+- Shopping cart that persists after a page refresh.
+- Checkout with delivery details, stock validation and order history.
+- Admin dashboard for creating, editing and archiving products, updating stock and managing order status.
+- GitHub Actions workflow for automated checks, builds and deployment.
 
-## Included
+## Technology Stack
+|-----------------------------------------------------------------|
+| Layer          | Technologies                                   |
+|----------------|------------------------------------------------|                                         
+| Frontend       | React, Vite, CSS, Lucide icons                 |
+| Backend        | Node.js, Express, REST API                     |
+| Database       | MongoDB, Mongoose                              |
+| Authentication | JWT, HttpOnly cookies, bcrypt password hashing |
+| Validation     | Zod                                            |
+| Testing        | Node.js test runner, Supertest, Playwright     |
+| CI/CD          | GitHub Actions; Render deployment integration  |
+|-----------------------------------------------------------------|
 
-36 products across 4 categories with bundled real stock photographs; responsive storefront; search/category/sort; product details; persistent browser cart; registration/login/logout; cash-on-delivery demo checkout; database-backed order history; role-restricted product create/read/update/archive; order-status management; automated API and browser tests; one-service production build; CI/CD workflow.
+## How the Project Works
 
-**Start with `START-HERE.txt` for the short Windows instructions.** This is the complete project; no earlier ZIP or photo patch is required. All 36 JPG files are already inside `client/public/products/photos`. Displaying the catalog photos does not contact an external photo server. The photographs illustrate demo merchandise; credits are in `docs/PHOTO-SOURCES.md`.
+### Product browsing
 
-**No payment gateway, card collection or real goods fulfillment.** The task does not require online payments. Admin access is granted by a local command, never by a signup field. Prices are stored as integer paise and computed by the server. Checkout uses a MongoDB transaction and an idempotency key.
+The React storefront requests products from the Express API. The API reads active products from MongoDB and applies the requested search, category and sort options. Product photographs are served from the project's public assets.
 
-## Quick start on Windows (PowerShell, CMD or Git Bash)
+### Authentication
 
-### 1. Extract and open the correct folder
+Registration creates a customer account with a hashed password. After registration or login, the server issues a signed JWT in an HttpOnly cookie. Protected requests validate the token and load the current account from MongoDB. Admin routes also check the account's role.
 
-Install **Node.js 24** from https://nodejs.org/ and restart your terminal. Extract this ZIP into a new folder, so the final project is separate from any earlier copy. Open a terminal in the **shoplane** folder containing `package.json` (not the parent Downloads folder). In VS Code: File → Open Folder → shoplane → Terminal → New Terminal.
+### Shopping cart
 
-```sh
-node -v
-npm -v
+Cart items and quantities are managed in React state and saved in browser local storage. This lets the cart survive a refresh. Users sign in before proceeding to checkout.
+
+### Checkout and orders
+
+The frontend sends product IDs, quantities and delivery details to the API. The server loads current product prices, validates stock and calculates the total. A MongoDB transaction updates inventory and creates the order together. Retrying the same checkout request returns the existing order instead of creating a duplicate.
+
+The order stores a snapshot of the purchased items, prices and delivery address. Customers can view their own order history after checkout.
+
+### Administration
+
+Administrators manage the catalog and inventory through protected API routes. Archiving a product removes it from the active storefront while preserving order history. Orders progress through **Placed → Processing → Shipped → Delivered**.
+
+## Run Locally
+
+Requirements: **Node.js 24** and **MongoDB Atlas or a MongoDB replica set**. Checkout uses database transactions.
+
+From the project root:
+
+```bash
 npm ci
 npm run setup
 ```
 
-`npm run setup` creates `server/.env` and generates your own random JWT secret. It never overwrites an existing environment file. `node_modules` is intentionally not in the ZIP; `npm ci` installs the locked dependencies.
+The setup command creates `server/.env` with a generated JWT secret. Set `MONGO_URI` in that file to your MongoDB connection string, using `shoplane` as the database name. Keep `NODE_ENV=development` for local use.
 
-### 2. Connect MongoDB — choose ONE method
-
-**Option A: MongoDB Atlas (no local database installation)**
-
-1. Visit https://www.mongodb.com/atlas and create a cluster. Select a free option only if available; do not select a paid plan unintentionally.
-2. Create a database user with a strong password (different from your Atlas login).
-3. In Network Access, allow your current public IP.
-4. Connect → Drivers → Node.js → copy the connection string.
-5. Open `server/.env` and replace only `MONGO_URI` with your real string, including database name `shoplane`:
-
-```dotenv
-MONGO_URI=mongodb+srv://YOUR_DB_USER:YOUR_URL_ENCODED_PASSWORD@YOUR_CLUSTER.mongodb.net/shoplane?retryWrites=true&w=majority
-```
-
-Replace all placeholders. URL-encode special password characters. Do not paste the real URI into chat, GitHub or a social post. Keep the generated JWT secret. Atlas supports the transactions used by checkout.
-
-**Option B: local MongoDB using Docker Desktop**
-
-With Docker Desktop running, keep the generated local `MONGO_URI` and run:
-
-```sh
-docker compose up -d --wait
-```
-
-This starts MongoDB with a replica set and a persistent volume. It binds the database port only to localhost. If port 27017 is occupied, stop the other local MongoDB instance first. A plain standalone MongoDB server will not support checkout transactions.
-
-### 3. Add the catalog and run
-
-```sh
+```bash
 npm run seed
 npm run dev
 ```
 
-Open **http://localhost:5173**. The API runs on http://localhost:5000; Vite forwards `/api` requests. Leave this terminal open; Ctrl+C stops the app.
+Open [http://localhost:5173](http://localhost:5173). Vite forwards `/api` requests to the backend on port `5000`.
 
-Seeding is repeatable: it inserts missing catalog SKUs and preserves existing products, stock, users and orders. It does not create a shared/default admin password.
+The seed command adds missing catalog products while preserving existing products, users and orders. Run it when preparing a new database.
 
-### 4. Get admin access
+### Admin access
 
-Register your own account in the website. Open a second terminal in the same shoplane folder:
+Register an account in the app, then run the following command in a second terminal against the same database:
 
-```sh
-npm run admin -- your-email@example.com
+```bash
+npm run admin -- your-registered-email@example.com
 ```
 
-Use the exact registered email address. Refresh the website and click **Admin**. You can add/edit/archive products and advance orders from Placed → Processing → Shipped → Delivered. Archive preserves historical order details; edit and tick “Visible in store” to restore a product.
+Replace the sample email with your registered email and refresh the app.
 
-For seeded products, the original `/products/*.svg` values are kept for database compatibility; the React photo map displays the matching bundled JPG. This also upgrades existing cart and order images. For a new custom product, place your own JPG, JPEG, PNG, WEBP or SVG directly in `client/public/products`, enter `/products/your-file.jpg` (or its matching extension) in the admin form, and rebuild for deployment. Use filenames containing only letters, digits and hyphens. The admin form accepts an image path; it does not upload a file.
+### Production build
 
-### 5. Production build locally
-
-Stop the development server first:
-
-```sh
+```bash
 npm run build
 npm start
 ```
 
-Open **http://localhost:5000**. Express now serves the compiled React app and API together. Keep `NODE_ENV=development` for local HTTP so the session cookie works. On HTTPS hosting, use `NODE_ENV=production`.
+Express serves the compiled frontend and API together at [http://localhost:5000](http://localhost:5000) when using the default local port. On HTTPS hosting, set `NODE_ENV=production`.
 
-## Test commands
+## CI/CD
 
-```sh
+The workflow in `.github/workflows/ci-cd.yml` runs on pull requests to `main`, pushes to `main` and manual triggers.
+
+1. Install dependencies from the lockfile.
+2. Check backend and script syntax.
+3. Run API and database integration tests.
+4. Build the React frontend.
+5. Run browser checkout and mobile layout tests.
+6. Deploy the verified commit to Render when deployment is enabled on `main`.
+
+The deployment job checks application health and confirms that the live commit matches the tested revision. See the [deployment guide](docs/DEPLOYMENT.md) for setup and the [CI/CD walkthrough](docs/CI-CD-WALKTHROUGH.md) for the pipeline details.
+
+## Tests
+
+```bash
 npm run check
 npm test
 npm run build
@@ -100,58 +113,21 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The API and browser tests create **isolated temporary MongoDB replica sets** and never connect to your real database. First test execution downloads a MongoDB binary and the browser; internet access is required. Linux users may need `npx playwright install --with-deps chromium`. The browser tests use port 5001.
+API integration and browser tests use temporary MongoDB replica sets. Internet access is needed for the initial MongoDB binary and browser downloads. Recorded verification results are in the [test report](docs/TEST-REPORT.md).
 
-## Deployment, CI/CD and submission
+## Project Structure
 
-Read these in order:
-
-1. `docs/DEPLOYMENT.md` — GitHub + Atlas + Render setup.
-2. `docs/CI-CD-WALKTHROUGH.md` — pipeline explanation and a walkthrough you can adapt and publish after verifying your own run.
-3. `docs/DEMO-AND-SUBMISSION.md` — demo recording script, post drafts and submission checklist.
-4. `docs/API.md` — API routes, request shapes and security notes.
-5. `docs/TEST-REPORT.md` — actual verification results for this ZIP.
-
-A Postman collection is included at `docs/Shoplane.postman_collection.json`.
-
-## Folder guide
-
-| Path | Purpose |
-| --- | --- |
-| `client/src` | React UI and responsive styles |
-| `client/public/products/photos` | 36 local JPG product photographs |
-| `client/public/products` | Original paths retained for compatibility; custom product images |
-| `server/app.js` | API routes, validation, auth, checkout transaction |
-| `server/models.js` | User, Product and Order MongoDB schemas |
-| `server/catalog.json` | Seed catalog |
-| `server/tests` | API/database integration tests |
-| `tests` | Browser smoke tests |
-| `.github/workflows/ci-cd.yml` | CI and deployment jobs |
-| `scripts` | Setup, syntax check, isolated test server, deployment |
-
-## Troubleshooting
-
-| Problem | Fix |
-| --- | --- |
-| `vite`, `concurrently` or a module not found | Run `npm ci` from the folder containing root `package.json`. |
-| `ENOENT package.json` | You are in the wrong folder; open the extracted `shoplane` directory. |
-| PowerShell blocks `npm.ps1` | Use `npm.cmd` instead of `npm`, or use CMD/Git Bash. No policy change is needed. |
-| MongoDB authentication failure | Check Atlas database username/password, URL encoding and connection string. |
-| `ECONNREFUSED` / database selection timeout | Start Docker MongoDB, or check Atlas Network Access and your IP. |
-| `docker: command not found` | Follow the Atlas option above; Docker is optional. |
-| `JWT_SECRET must be...` | Run `npm run setup` in a fresh extraction. If reusing an existing `.env` with an invalid secret, follow `START-HERE.txt`. |
-| Vite proxy `ECONNREFUSED 127.0.0.1:5000` | The API has not started. Fix the API terminal's MongoDB/configuration error, then restart `npm run dev`. |
-| `Cannot GET /` on port 5000 during development | Open http://localhost:5173 for the storefront. Port 5000 serves the storefront after `npm run build`. |
-| `Photo unavailable` | Verify that the entire ZIP was extracted, including `client/public/products/photos`. Open http://localhost:5173/products/photos/studio-headphones.jpg to check. |
-| `/api/auth/me` returns 401 before signing in | This is the expected response for a visitor without a session. Sign in to access protected pages. |
-| Checkout says replica set / transaction error | Use Atlas or the supplied Docker replica set, not standalone MongoDB. |
-| Empty catalog | Set the correct URI, then run `npm run seed`. |
-| Port 5000 or 5173 in use | Stop the previous app/terminal using that port, then run again. |
-| Login succeeds but cookie isn't kept locally | Keep local `NODE_ENV=development`; production secure cookies require HTTPS. |
-| Admin button missing | Register first, run the admin command against the same database, refresh. |
-| GitHub deploy job is skipped | Add the deployment secret and repository variables per the deployment guide. |
-| First tests download fails | Check internet/firewall access to MongoDB binary and Playwright download hosts, then retry. |
-
-## Scope
-
-This is an internship demo, not a production retail service. It has no email verification, password reset, online payment, refunds, tax engine, inventory reservation before checkout or cancellation workflow. Cart persists in the browser; users/products/orders persist in MongoDB. Admin lists show at most 500 products and 200 recent orders; customer order history shows 100. Search returns at most 200 products. Catalog descriptions and images are illustrative. Adapt branding and explanations so you can confidently explain your own submission.
+|-------------------------------------------------------------------------------------------------|
+| Path                             | Purpose                                                      |
+|----------------------------------|--------------------------------------------------------------|
+| `client/src/`                    | React storefront, account flows and admin interface          |
+| `client/public/products/photos/` | Bundled product photographs                                  |
+| `server/app.js`                  | API routes, authentication and checkout logic                |
+| `server/models.js`               | User, Product and Order schemas                              |
+| `server/catalog.json`            | Initial product catalog                                      |
+| `server/tests/`                  | API validation and database integration tests                |
+| `tests/`                         | Browser tests                                                |
+| `scripts/`                       | Setup, checks and deployment utilities                       |
+| `.github/workflows/`             | GitHub Actions configuration                                 |
+| `docs/`                          | API reference, deployment guide and supporting documentation |
+|-------------------------------------------------------------------------------------------------|
