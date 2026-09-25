@@ -13,17 +13,16 @@ Shoplane is a full-stack e-commerce application built with React, Node.js, Expre
 - GitHub Actions workflow for automated checks, builds and deployment.
 
 ## Technology Stack
-|-----------------------------------------------------------------|
-| Layer          | Technologies                                   |
-|----------------|------------------------------------------------|                                         
-| Frontend       | React, Vite, CSS, Lucide icons                 |
-| Backend        | Node.js, Express, REST API                     |
-| Database       | MongoDB, Mongoose                              |
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | React, Vite, CSS, Lucide icons |
+| Backend | Node.js, Express, REST API |
+| Database | MongoDB, Mongoose |
 | Authentication | JWT, HttpOnly cookies, bcrypt password hashing |
-| Validation     | Zod                                            |
-| Testing        | Node.js test runner, Supertest, Playwright     |
-| CI/CD          | GitHub Actions; Render deployment integration  |
-|-----------------------------------------------------------------|
+| Validation | Zod |
+| Testing | Node.js test runner, Supertest, Playwright |
+| CI/CD | GitHub Actions; Render deployment integration |
 
 ## How the Project Works
 
@@ -117,17 +116,17 @@ API integration and browser tests use temporary MongoDB replica sets. Internet a
 
 ## Project Structure
 
-|-------------------------------------------------------------------------------------------------|
-| Path                             | Purpose                                                      |
-|----------------------------------|--------------------------------------------------------------|
-| `client/src/`                    | React storefront, account flows and admin interface          |
-| `client/public/products/photos/` | Bundled product photographs                                  |
-| `server/app.js`                  | API routes, authentication and checkout logic                |
-| `server/models.js`               | User, Product and Order schemas                              |
-| `server/catalog.json`            | Initial product catalog                                      |
-| `server/tests/`                  | API validation and database integration tests                |
-| `tests/`                         | Browser tests                                                |
-| `scripts/`                       | Setup, checks and deployment utilities                       |
-| `.github/workflows/`             | GitHub Actions configuration                                 |
-| `docs/`                          | API reference, deployment guide and supporting documentation |
-|-------------------------------------------------------------------------------------------------|
+| Path | Purpose |
+| --- | --- |
+| `client/src/` | React storefront, account flows and admin interface |
+| `client/public/products/photos/` | Bundled product photographs |
+| `server/app.js` | API routes, authentication and checkout logic |
+| `server/models.js` | User, Product and Order schemas |
+| `server/catalog.json` | Initial product catalog |
+| `server/tests/` | API validation and database integration tests |
+| `tests/` | Browser tests |
+| `scripts/` | Setup, checks and deployment utilities |
+| `.github/workflows/` | GitHub Actions configuration |
+| `docs/` | API reference, deployment guide and supporting documentation |
+
+API endpoints and request formats are documented in the [API reference](docs/API.md). A [Postman collection](docs/Shoplane.postman_collection.json) and [photo credits](docs/PHOTO-SOURCES.md) are included.
