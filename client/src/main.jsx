@@ -117,7 +117,17 @@ function App(){
  function change(id,delta){setCart(c=>c.map(i=>i._id===id?{...i,quantity:Math.min(10,Math.max(0,i.quantity+delta))}:i).filter(i=>i.quantity>0));}
  const count=cart.reduce((s,i)=>s+i.quantity,0),subtotal=cart.reduce((s,i)=>s+i.price*i.quantity,0),shipping=subtotal>=199900?0:9900;
  function navigate(next){setView(next);setDrawer(false);window.scrollTo({top:0,behavior:'smooth'});}
- function checkout(){if(!user){setAuthMode('login');setToast('Sign in to place your order');return;}navigate('checkout');}
+ function checkout() {
+  setDrawer(false);
+
+  if (!user) {
+    setAuthMode('login');
+    setToast('Sign in to place your order');
+    return;
+  }
+
+  navigate('checkout');
+}
  async function logout(){try{await api('/auth/logout',{method:'POST'});setUser(null);navigate('shop');setToast('Signed out');}catch(e){setToast(e.message);}}
  return <>
   <div className="announcement">A little upgrade for your everyday. <span>Free shipping on orders ₹1,999+</span><ArrowUpRight size={13}/></div>
