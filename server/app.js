@@ -22,13 +22,13 @@ async function auth(req,res,next){
  catch {next(fail(401,'Please sign in to continue.'));}
 }
 function admin(req,res,next){return req.user.role==='admin'?next():next(fail(403,'Administrator access required.'));}
-export function createApp(){
+export function createApp({serveClient=true}={}){
  const app=express();
  app.disable('x-powered-by');
  if(process.env.TRUST_PROXY==='1') app.set('trust proxy',1);
  app.use(helmet({contentSecurityPolicy:{directives:{imgSrc:["'self'",'data:','https://images.unsplash.com'],scriptSrc:["'self'"],upgradeInsecureRequests:process.env.NODE_ENV==='production'?[]:null}}}));
  app.use(express.json({limit:'30kb'}),cookieParser());
- app.get('/api/health',(_,res)=>res.status(mongoose.connection.readyState===1?200:503).json({status:mongoose.connection.readyState===1?'ok':'unavailable',commit:process.env.RENDER_GIT_COMMIT||'local'}));
+ app.get('/api/health',(_,res)=>res.status(mongoose.connection.readyState===1?200:503).json({status:mongoose.connection.readyState===1?'ok':'unavailable',commit:process.env.VERCEL_GIT_COMMIT_SHA||process.env.RENDER_GIT_COMMIT||'local'}));
  app.use('/api',rateLimit({windowMs:60000,limit:300,standardHeaders:'draft-8',legacyHeaders:false}));
  // Cross-site forms cannot send this header; no cross-origin CORS is enabled.
  app.use('/api',(req,res,next)=>{
@@ -90,7 +90,7 @@ export function createApp(){
  });
  app.use('/api',(_,res)=>res.status(404).json({message:'API route not found.'}));
  const dist=fileURLToPath(new URL('../client/dist/',import.meta.url));
- if(existsSync(dist)){app.use(express.static(dist));app.get('/{*path}',(_,res)=>res.sendFile(dist+'index.html'));}
+ if(serveClient&&existsSync(dist)){app.use(express.static(dist));app.get('/{*path}',(_,res)=>res.sendFile(dist+'index.html'));}
  app.use((err,req,res,next)=>{
   if(err instanceof z.ZodError)return res.status(400).json({message:err.issues.map(i=>i.message).join('; ')});
   if(err.code===11000)return res.status(409).json({message:'Email or SKU already exists.'});
