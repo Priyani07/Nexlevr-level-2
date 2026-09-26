@@ -14,7 +14,7 @@ Shoplane is a full-stack e-commerce application built with React, Node.js, Expre
 
 ## Technology Stack
 
-| Layer | Technologies |
+| Layer | Technologies|
 | --- | --- |
 | Frontend | React, Vite, CSS, Lucide icons |
 | Backend | Node.js, Express, REST API |
