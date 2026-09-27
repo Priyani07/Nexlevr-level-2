@@ -32,7 +32,11 @@ export default async function handler(req, res) {
     await connectDatabase();
   } catch (error) {
     // Never expose connection strings or credentials to the browser.
-    console.error('Shoplane database initialization failed:', error.name);
+    console.error('Shoplane database initialization failed:', {
+  name: error.name,
+  code: error.code,
+  codeName: error.codeName
+});
     res.statusCode = 503;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ message: 'Database unavailable. Check Vercel environment variables and Atlas network access.' }));
