@@ -1,0 +1,12 @@
+node_modules
+.git
+.env
+.env.*
+server/.env
+server/.env.*
+client/.env
+client/.env.*
+coverage
+playwright-report
+test-results
+*.log
