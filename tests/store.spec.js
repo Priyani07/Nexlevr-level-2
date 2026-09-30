@@ -4,6 +4,11 @@ test('browse, search, persistent bag, registration, checkout and order history',
   await page.goto('/');
   await expect(page.getByText('36 products', { exact: true })).toBeVisible();
 
+  const photo = page.getByRole('img', {name:'Studio Headphones',exact:true}).first();
+  await expect(photo).toHaveAttribute('src','/products/photos/studio-headphones.jpg');
+  await photo.scrollIntoViewIfNeeded();
+  await expect.poll(() => photo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+
   await page.getByRole('textbox', { name: 'Search products' })
     .fill('Studio Headphones');
   await expect(page.getByText('1 products', { exact: true })).toBeVisible();

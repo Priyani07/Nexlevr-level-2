@@ -1,7 +1,10 @@
-import { existsSync, copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
-if (!existsSync('server/.env')) {
- copyFileSync('server/.env.example', 'server/.env');
- writeFileSync('server/.env', readFileSync('server/.env','utf8').replace('replace-with-a-random-secret-at-least-32-characters',randomBytes(48).toString('hex')));
- console.log('Created server/.env with a random JWT secret. Set MONGO_URI before seeding.');
-} else console.log('server/.env already exists; preserved.');
+const target = new URL('../.env', import.meta.url);
+let content=readFileSync(existsSync(target)?target:new URL('../.env.example',import.meta.url),'utf8');
+const placeholder='replace-with-a-random-secret-at-least-32-characters';
+if(content.includes(placeholder)) {
+ content=content.replace(placeholder,randomBytes(48).toString('hex'));
+ writeFileSync(target,content,{mode:0o600});
+ console.log('Root .env is ready with a unique JWT secret. Edit MONGO_URI, then run npm run doctor.');
+} else console.log('Existing .env preserved. Edit MONGO_URI if needed.');

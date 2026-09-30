@@ -12,10 +12,10 @@ import {User,Product,Order} from './models.js';
 const id=z.string().regex(/^[a-f0-9]{24}$/i,'Invalid ID');
 const email=z.email().max(254).transform(v=>v.toLowerCase());
 const password=z.string().min(8).max(72);
-const productInput=z.object({sku:z.string().trim().min(2).max(40),name:z.string().trim().min(2).max(100),description:z.string().trim().min(10).max(1500),category:z.enum(['Electronics','Home & Living','Accessories','Lifestyle']),price:z.number().int().min(100).max(100000000),stock:z.number().int().min(0).max(100000),image:z.string().regex(/^\/products\/[a-z0-9-]+\.(?:svg|jpg|jpeg|png|webp)$/i),active:z.boolean().optional()});
+const productInput=z.object({sku:z.string().trim().min(2).max(40),name:z.string().trim().min(2).max(100),description:z.string().trim().min(10).max(1500),category:z.enum(['Electronics','Home & Living','Accessories','Lifestyle']),price:z.number().int().min(100).max(100000000),stock:z.number().int().min(0).max(100000),image:z.string().regex(/^\/products\/(?:photos\/)?[a-z0-9-]+\.(?:svg|jpg|jpeg|png|webp)$/i),active:z.boolean().optional()});
 const fail=(status,message)=>Object.assign(new Error(message),{status});
 const safeUser=u=>({id:u._id,name:u.name,email:u.email,role:u.role});
-const cookieOptions=()=>({httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'lax',path:'/',maxAge:7*24*60*60*1000});
+const cookieOptions=()=>({httpOnly:true,secure:(process.env.NODE_ENV==='production'||Boolean(process.env.VERCEL)),sameSite:'lax',path:'/',maxAge:7*24*60*60*1000});
 const signIn=(res,user)=>res.cookie('shoplane_session',jwt.sign({sub:String(user._id)},process.env.JWT_SECRET,{expiresIn:'7d',algorithm:'HS256'}),cookieOptions());
 async function auth(req,res,next){
  try { const token=req.cookies.shoplane_session; if(!token) throw Error(); const data=jwt.verify(token,process.env.JWT_SECRET,{algorithms:['HS256']}); const user=await User.findById(data.sub); if(!user) throw Error(); req.user=user; next(); }
@@ -25,10 +25,10 @@ function admin(req,res,next){return req.user.role==='admin'?next():next(fail(403
 export function createApp({serveClient=true}={}){
  const app=express();
  app.disable('x-powered-by');
- if(process.env.TRUST_PROXY==='1') app.set('trust proxy',1);
- app.use(helmet({contentSecurityPolicy:{directives:{imgSrc:["'self'",'data:','https://images.unsplash.com'],scriptSrc:["'self'"],upgradeInsecureRequests:process.env.NODE_ENV==='production'?[]:null}}}));
+ if(process.env.TRUST_PROXY==='1'||process.env.VERCEL) app.set('trust proxy',1);
+ app.use(helmet({contentSecurityPolicy:{directives:{imgSrc:["'self'",'data:','https://images.unsplash.com'],scriptSrc:["'self'"],upgradeInsecureRequests:(process.env.NODE_ENV==='production'||Boolean(process.env.VERCEL))?[]:null}}}));
  app.use(express.json({limit:'30kb'}),cookieParser());
- app.get('/api/health',(_,res)=>res.status(mongoose.connection.readyState===1?200:503).json({status:mongoose.connection.readyState===1?'ok':'unavailable',commit:process.env.VERCEL_GIT_COMMIT_SHA||process.env.RENDER_GIT_COMMIT||'local'}));
+ app.get('/api/health',(_,res)=>res.status(mongoose.connection.readyState===1?200:503).json({status:mongoose.connection.readyState===1?'ok':'unavailable',commit:process.env.SHOPLANE_COMMIT||process.env.VERCEL_GIT_COMMIT_SHA||process.env.RENDER_GIT_COMMIT||'local'}));
  app.use('/api',rateLimit({windowMs:60000,limit:300,standardHeaders:'draft-8',legacyHeaders:false}));
  // Cross-site forms cannot send this header; no cross-origin CORS is enabled.
  app.use('/api',(req,res,next)=>{

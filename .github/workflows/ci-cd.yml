@@ -33,20 +33,24 @@ jobs:
       - name: Browser checkout and mobile tests
         run: npm run test:e2e
   deploy:
-    name: Deploy verified commit
+    name: Deploy verified commit to Vercel
     needs: verify
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.VERCEL_CD_ENABLED == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 20
     environment: production
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-      - name: Deploy and verify live revision
-        run: node scripts/deploy-render.mjs
+      - name: Deploy this tested revision
+        run: npx --yes vercel@61.1.0 deploy --prod --yes --token="$VERCEL_TOKEN" --env SHOPLANE_COMMIT="$GITHUB_SHA" > deployment-url.txt
+      - name: Check live API and tested revision
+        run: node scripts/verify-deployment.mjs
         env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-          APP_URL: ${{ vars.APP_URL }}
-          GITHUB_SHA: ${{ github.sha }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}

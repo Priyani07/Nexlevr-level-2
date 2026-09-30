@@ -1,132 +1,69 @@
 # Shoplane
 
-Shoplane is a full-stack e-commerce application built with React, Node.js, Express and MongoDB. Customers can browse products, manage a shopping cart and place cash-on-delivery demo orders. Administrators manage products, inventory and order fulfillment.
+A MERN e-commerce demo built for Nexlevr Level 2. Start with [START-HERE.md](START-HERE.md)
+for local setup and Vercel deployment. No application code edits are needed to configure it.
 
 ## Features
 
-- Responsive storefront with 36 products across four categories and bundled product photographs.
-- Product search, category filters, sorting and detailed product views.
-- Account registration, login and logout.
-- Shopping cart that persists after a page refresh.
-- Checkout with delivery details, stock validation and order history.
-- Admin dashboard for creating, editing and archiving products, updating stock and managing order status.
-- GitHub Actions workflow for automated checks, builds and deployment.
+- 36 products with bundled local JPEG photos, search, categories and sorting.
+- Persistent shopping bag, quantity controls and stock checks.
+- Registration/login with hashed passwords and HttpOnly JWT session cookies.
+- Demo cash-on-delivery checkout, order history and an admin panel.
+- Server-calculated totals, transactional stock updates and idempotent checkout.
+- Validation, role checks, request protection and per-instance rate limiting.
+- Responsive React/Vite frontend, Express API and MongoDB/Mongoose database.
 
-## Technology Stack
-
-| Layer | Technologies|
-| --- | --- |
-| Frontend | React, Vite, CSS, Lucide icons |
-| Backend | Node.js, Express, REST API |
-| Database | MongoDB, Mongoose |
-| Authentication | JWT, HttpOnly cookies, bcrypt password hashing |
-| Validation | Zod |
-| Testing | Node.js test runner, Supertest, Playwright |
-| CI/CD | GitHub Actions; Render deployment integration |
-
-## How the Project Works
-
-### Product browsing
-
-The React storefront requests products from the Express API. The API reads active products from MongoDB and applies the requested search, category and sort options. Product photographs are served from the project's public assets.
-
-### Authentication
-
-Registration creates a customer account with a hashed password. After registration or login, the server issues a signed JWT in an HttpOnly cookie. Protected requests validate the token and load the current account from MongoDB. Admin routes also check the account's role.
-
-### Shopping cart
-
-Cart items and quantities are managed in React state and saved in browser local storage. This lets the cart survive a refresh. Users sign in before proceeding to checkout.
-
-### Checkout and orders
-
-The frontend sends product IDs, quantities and delivery details to the API. The server loads current product prices, validates stock and calculates the total. A MongoDB transaction updates inventory and creates the order together. Retrying the same checkout request returns the existing order instead of creating a duplicate.
-
-The order stores a snapshot of the purchased items, prices and delivery address. Customers can view their own order history after checkout.
-
-### Administration
-
-Administrators manage the catalog and inventory through protected API routes. Archiving a product removes it from the active storefront while preserving order history. Orders progress through **Placed → Processing → Shipped → Delivered**.
-
-## Run Locally
-
-Requirements: **Node.js 24** and **MongoDB Atlas or a MongoDB replica set**. Checkout uses database transactions.
-
-From the project root:
+## Run
 
 ```bash
 npm ci
 npm run setup
-```
-
-The setup command creates `server/.env` with a generated JWT secret. Set `MONGO_URI` in that file to your MongoDB connection string, using `shoplane` as the database name. Keep `NODE_ENV=development` for local use.
-
-```bash
-npm run seed
+# Edit root .env: replace MONGO_URI with your Atlas URI.
+npm run doctor
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). Vite forwards `/api` requests to the backend on port `5000`.
+Open http://localhost:5173. Setup generates a unique JWT_SECRET. Startup ensures
+missing catalog products exist without overwriting stock or admin edits. MONGO_DB_NAME
+selects the database explicitly. The database user must have readWrite access to it.
 
-The seed command adds missing catalog products while preserving existing products, users and orders. Run it when preparing a new database.
+## How it works
 
-### Admin access
+The browser calls same-origin /api routes. Locally Vite forwards these to Express
+on port 5000. On Vercel, api/index.js forwards them to the same Express application;
+static frontend files and photos are served from client/dist. Warm function requests
+share a MongoDB connection pool and startup promise. Failed startup can retry.
 
-Register an account in the app, then run the following command in a second terminal against the same database:
+Products, users and orders are stored in MongoDB. Orders use a transaction to update
+stock and save the order together. A unique user/request ID makes repeat submissions
+safe. Atlas or another replica set is needed for checkout. The bag is browser-local.
+Photos are representative demo images; credits are included in the product detail view.
 
-```bash
-npm run admin -- your-registered-email@example.com
-```
+## Commands
 
-Replace the sample email with your registered email and refresh the app.
-
-### Production build
-
-```bash
-npm run build
-npm start
-```
-
-Express serves the compiled frontend and API together at [http://localhost:5000](http://localhost:5000) when using the default local port. On HTTPS hosting, set `NODE_ENV=production`.
-
-## CI/CD
-
-The workflow in `.github/workflows/ci-cd.yml` runs on pull requests to `main`, pushes to `main` and manual triggers.
-
-1. Install dependencies from the lockfile.
-2. Check backend and script syntax.
-3. Run API and database integration tests.
-4. Build the React frontend.
-5. Run browser checkout and mobile layout tests.
-6. Deploy the verified commit to Render when deployment is enabled on `main`.
-
-The deployment job checks application health and confirms that the live commit matches the tested revision. See the [deployment guide](docs/DEPLOYMENT.md) for setup and the [CI/CD walkthrough](docs/CI-CD-WALKTHROUGH.md) for the pipeline details.
-
-## Tests
-
-```bash
-npm run check
-npm test
-npm run build
-npx playwright install chromium
-npm run test:e2e
-```
-
-API integration and browser tests use temporary MongoDB replica sets. Internet access is needed for the initial MongoDB binary and browser downloads. Recorded verification results are in the [test report](docs/TEST-REPORT.md).
-
-## Project Structure
-
-| Path | Purpose |
+| Command | Purpose |
 | --- | --- |
-| `client/src/` | React storefront, account flows and admin interface |
-| `client/public/products/photos/` | Bundled product photographs |
-| `server/app.js` | API routes, authentication and checkout logic |
-| `server/models.js` | User, Product and Order schemas |
-| `server/catalog.json` | Initial product catalog |
-| `server/tests/` | API validation and database integration tests |
-| `tests/` | Browser tests |
-| `scripts/` | Setup, checks and deployment utilities |
-| `.github/workflows/` | GitHub Actions configuration |
-| `docs/` | API reference, deployment guide and supporting documentation |
+| npm run setup | Prepare .env and generate JWT secret |
+| npm run doctor | Check DB, indexes, topology; ensure catalog |
+| npm run dev | Run local frontend and API |
+| npm run build | Verify bundled assets and build frontend |
+| npm start | Serve built app locally |
+| npm run seed | Insert missing catalog products manually |
+| npm run admin -- email | Promote an existing registered user |
+| npm run check | Check server/API/script syntax |
+| npm run test:unit | Run deployment/validation tests without MongoDB |
+| npm test | Run API integration tests with isolated MongoDB |
+| npm run test:e2e | Browser checkout, photo and mobile tests after build |
 
-API endpoints and request formats are documented in the [API reference](docs/API.md). A [Postman collection](docs/Shoplane.postman_collection.json) and [photo credits](docs/PHOTO-SOURCES.md) are included.
+## Deployment and CI/CD
+
+See [START-HERE.md](START-HERE.md) and [docs/CI-CD.md](docs/CI-CD.md).
+Import root .env into Vercel after configuring it locally. The project root is the
+folder containing vercel.json; output is client/dist. Environment files are excluded
+from Git and deployment uploads. Never put database secrets in VITE_ variables.
+
+Postman: [docs/Shoplane.postman_collection.json](docs/Shoplane.postman_collection.json).
+
+This is an internship demo: COD creates an order record, not a real payment or shipment.
+Rate limiting is per function instance; a larger production store needs a shared store.
+No live deployment or social-media publication is performed by downloading this ZIP.
