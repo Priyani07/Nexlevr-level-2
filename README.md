@@ -1,69 +1,187 @@
-# Shoplane
+# Shoplane — Full-Stack E-Commerce Application
 
-A MERN e-commerce demo built for Nexlevr Level 2. Start with [START-HERE.md](START-HERE.md)
-for local setup and Vercel deployment. No application code edits are needed to configure it.
+Shoplane is a responsive e-commerce application built using React, Node.js, Express and MongoDB. Customers can browse products, manage their shopping bag, create an account and place demo cash-on-delivery orders. Administrators can manage products and update order statuses.
+
+Built for the **Nexlevr Level 2 Full Stack Development Internship**.
+
+**Live Demo:** https://nexlevr-level-2-client.vercel.app/
 
 ## Features
 
-- 36 products with bundled local JPEG photos, search, categories and sorting.
-- Persistent shopping bag, quantity controls and stock checks.
-- Registration/login with hashed passwords and HttpOnly JWT session cookies.
-- Demo cash-on-delivery checkout, order history and an admin panel.
-- Server-calculated totals, transactional stock updates and idempotent checkout.
-- Validation, role checks, request protection and per-instance rate limiting.
-- Responsive React/Vite frontend, Express API and MongoDB/Mongoose database.
+### Customer Features
 
-## Run
+- Browse a catalog of 36 products with bundled product photographs.
+- Search products by name.
+- Filter products by category and sort by price or name.
+- View product details, prices and available stock.
+- Add products to a shopping bag and adjust quantities.
+- Keep shopping bag items after refreshing the browser.
+- Register, sign in and sign out.
+- Enter delivery details and place demo cash-on-delivery orders.
+- View personal order history and order status.
+- Use the application on desktop and mobile screens.
+
+### Admin Features
+
+- Add and edit products.
+- Update product prices and stock.
+- Archive products to remove them from the storefront.
+- View customer orders.
+- Update order status from Placed to Processing, Shipped and Delivered.
+
+## Tech Stack
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | React, Vite, CSS, Lucide icons |
+| Backend | Node.js, Express |
+| Database | MongoDB Atlas, Mongoose |
+| Authentication | JWT, bcrypt, HttpOnly cookies |
+| Validation | Zod |
+| Testing | Node.js test runner, Supertest, Playwright |
+| Hosting | Vercel |
+| CI | GitHub Actions |
+
+## How the Application Works
+
+### Product Catalog
+
+The backend retrieves products from MongoDB and returns them through REST API endpoints. The frontend displays the results and sends search, category and sorting options to the API.
+
+Product photographs are included in the project and served from the application's own domain.
+
+### Shopping Bag
+
+The shopping bag is stored in browser local storage, so its contents remain after a page refresh. Customers can change quantities or remove products before checkout.
+
+### Authentication
+
+Passwords are hashed using bcrypt. After registration or login, the server issues a JWT session token in an HttpOnly cookie.
+
+Protected routes require authentication. Admin routes also check the user's role.
+
+### Checkout and Orders
+
+The server checks current prices and stock when an order is submitted. It calculates the final total instead of trusting prices sent by the browser.
+
+MongoDB transactions update stock and save the order together. A unique checkout request ID prevents the same request from creating duplicate orders.
+
+Customers can view only their own order history.
+
+### Deployment
+
+The React frontend and Express API share one Vercel domain. Requests to `/api` are handled by the serverless API entry point.
+
+The backend reuses its MongoDB connection across warm requests. During initialization, missing catalog products are inserted without overwriting existing stock or product edits.
+
+## Project Structure
+
+```text
+api/                  Vercel API entry point
+client/
+  public/             Product photographs and static assets
+  src/                React components and styles
+server/               Express API, models and database configuration
+scripts/              Setup, diagnostics and deployment utilities
+tests/                Playwright browser tests
+docs/                 Postman collection and project documentation
+.github/workflows/    GitHub Actions workflow
+.env.example          Environment variable template
+vercel.json           Vercel build and routing configuration
+```
+
+## Run Locally
+
+### Prerequisites
+
+- Node.js 24 LTS
+- npm
+- MongoDB Atlas database and a database user with appropriate access
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Priyani07/Nexlevr-level-2.git
+cd Nexlevr-level-2
+```
+
+### 2. Install Dependencies and Prepare Configuration
 
 ```bash
 npm ci
 npm run setup
-# Edit root .env: replace MONGO_URI with your Atlas URI.
+```
+
+The setup command creates a root `.env` file and generates a JWT secret.
+
+### 3. Configure MongoDB
+
+Edit the root `.env` file:
+
+- Set `MONGO_URI` to your complete Atlas connection string.
+- Set `MONGO_DB_NAME` to the database you want to use.
+- Keep the generated `JWT_SECRET`.
+- Keep `AUTO_SEED=true` to initialize missing catalog products.
+
+Allow your connection in Atlas Network Access and grant the database user `readWrite` access to the selected database.
+
+Do not commit `.env` to GitHub.
+
+### 4. Check Configuration and Start
+
+```bash
 npm run doctor
 npm run dev
 ```
 
-Open http://localhost:5173. Setup generates a unique JWT_SECRET. Startup ensures
-missing catalog products exist without overwriting stock or admin edits. MONGO_DB_NAME
-selects the database explicitly. The database user must have readWrite access to it.
+Open **http://localhost:5173**.
 
-## How it works
+The local API runs on port **5000**. Vite forwards frontend API requests to it.
 
-The browser calls same-origin /api routes. Locally Vite forwards these to Express
-on port 5000. On Vercel, api/index.js forwards them to the same Express application;
-static frontend files and photos are served from client/dist. Warm function requests
-share a MongoDB connection pool and startup promise. Failed startup can retry.
+## Admin Access
 
-Products, users and orders are stored in MongoDB. Orders use a transaction to update
-stock and save the order together. A unique user/request ID makes repeat submissions
-safe. Atlas or another replica set is needed for checkout. The bag is browser-local.
-Photos are representative demo images; credits are included in the product detail view.
+Register an account through the application, then run:
 
-## Commands
+```bash
+npm run admin -- your-email@example.com
+```
 
-| Command | Purpose |
-| --- | --- |
-| npm run setup | Prepare .env and generate JWT secret |
-| npm run doctor | Check DB, indexes, topology; ensure catalog |
-| npm run dev | Run local frontend and API |
-| npm run build | Verify bundled assets and build frontend |
-| npm start | Serve built app locally |
-| npm run seed | Insert missing catalog products manually |
-| npm run admin -- email | Promote an existing registered user |
-| npm run check | Check server/API/script syntax |
-| npm run test:unit | Run deployment/validation tests without MongoDB |
-| npm test | Run API integration tests with isolated MongoDB |
-| npm run test:e2e | Browser checkout, photo and mobile tests after build |
+The command promotes that existing account to administrator in the configured database.
 
-## Deployment and CI/CD
+## Testing
 
-See [START-HERE.md](START-HERE.md) and [docs/CI-CD.md](docs/CI-CD.md).
-Import root .env into Vercel after configuring it locally. The project root is the
-folder containing vercel.json; output is client/dist. Environment files are excluded
-from Git and deployment uploads. Never put database secrets in VITE_ variables.
+```bash
+# Check JavaScript syntax
+npm run check
 
-Postman: [docs/Shoplane.postman_collection.json](docs/Shoplane.postman_collection.json).
+# Run deployment and validation tests without MongoDB
+npm run test:unit
 
-This is an internship demo: COD creates an order record, not a real payment or shipment.
-Rate limiting is per function instance; a larger production store needs a shared store.
-No live deployment or social-media publication is performed by downloading this ZIP.
+# Run API integration tests with an isolated MongoDB replica set
+npm test
+
+# Verify product assets and build the frontend
+npm run build
+
+# Install Chromium and run browser tests
+npx playwright install chromium
+npm run test:e2e
+```
+
+Tests cover authentication, access restrictions, product filtering, checkout, stock updates, order isolation and responsive layout.
+
+## CI/CD
+
+GitHub Actions runs syntax checks, API tests, the production build and Playwright browser tests.
+
+The current deployment uses Vercel's Git integration. This deployment runs independently of GitHub Actions.
+
+The workflow also includes an optional Vercel deployment job that depends on successful tests. It requires Vercel credentials and the `VERCEL_CD_ENABLED` repository variable before it can run.
+
+Setup and workflow explanation: [CI/CD Walkthrough](docs/CI-CD.md).
+
+## Project Scope
+
+Shoplane is an educational e-commerce demo. Cash-on-delivery checkout creates an order record; it does not collect payments or arrange shipments.
+
+Product photographs are representative demo images. Photo credits are available in product details.
