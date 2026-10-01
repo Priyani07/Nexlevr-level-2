@@ -4,7 +4,7 @@ Shoplane is a responsive e-commerce application built using React, Node.js, Expr
 
 Built for the **Nexlevr Level 2 Full Stack Development Internship**.
 
-**Live Demo:** nexlevr-level-2-client.vercel.app/
+**Live Demo:** https://nexlevr-level-2-client.vercel.app/
 
 ## Features
 
